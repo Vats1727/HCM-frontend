@@ -1,0 +1,111 @@
+/* body {
+    background-color: #3e5e7d;
+} */
+
+.input-group {
+    max-width: 100%;
+    /* margin: auto; */
+    border: none;
+    
+}
+
+.form-control  {
+    border-radius: 0 0.375rem 0.375rem 0;
+    
+}
+
+.input-group-text ,.name-label {
+    border-radius: 0.375rem 0 0 0.375rem;
+    background-color: #0b6e4f;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.input-group-text.fixed-width {
+    width: 100px; /* Fixed width for the input-group-text elements */
+}
+.form-control:focus, .form-select:focus {
+    outline: none; /* Ensure no outline on focus */
+    /* Optional: Add your own styles */
+    box-shadow: none; /* Remove any box-shadow if present */
+}
+.input-group-text:focus{
+
+    outline: none; /* Ensure no outline on focus */
+    /* Optional: Add your own styles */
+    box-shadow: none; /* Remove any box-shadow if present */
+}
+.form-control{
+    /* border-radius: 5px !important; */
+}
+.form-control:focus {
+    outline: none !important;
+    box-shadow: none !important;
+    /* border: none !important; */
+}
+
+
+.btn-checker:hover{
+
+    background-color: bisque !important;
+    color: #073426 !important;
+    transition: all 0.5s ease;
+
+
+
+}
+.btn-checker:checked{
+
+    background-color: bisque !important;
+
+
+}
+.btn-checker{
+
+    /* background-color: rgba(255, 228, 196, 0.131); */
+    margin:5px ;
+
+}
+#clear-selection-button:hover{
+
+    background-color: red;
+    color: bisque;
+    
+
+}
+#clear-selection-button{
+
+    background-color: rgba(255, 0, 0, 0.102);
+    margin:5px ;
+    color: red;
+    transition: all 0.5s ease;
+
+}
+
+
+
+@media only screen and (max-width: 768px){
+
+    .img-div {
+/* 
+        margin-bottom: 20px !important;
+        margin-bottom: auto !important;
+        padding-top: 15px !important; */
+        padding-bottom: 15px !important;
+
+
+        /* height: min- !important; */
+
+
+        
+
+
+
+
+        padding-right: 0px !important;
+
+    }
+
+}

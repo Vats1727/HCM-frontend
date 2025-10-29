@@ -1,0 +1,23 @@
+.table-responsive { 
+    overflow-x:auto; 
+    overflow-y: auto;
+}
+.btn-container {
+    display: flex;
+    flex-direction: column;
+}
+@media (min-width: 446px) {
+    .btn-container {
+        flex-direction: row;
+        justify-content: center;
+    }
+    .btn-container .btn {
+        margin: 0 5px;
+    }
+}
+
+.action-button:hover{
+    opacity: 75%;
+    
+    transition: all 0.2s ease-in-out;
+}

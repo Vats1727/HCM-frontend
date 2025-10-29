@@ -1,0 +1,195 @@
+.right-align {
+    text-align: right;
+}
+
+.input-group-text-right {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    background-color: #0b6e4f;
+    color: bisque;
+}
+
+.input-group-text-right span {
+    flex-grow: 1;
+}
+
+.input-group-text-right b {
+    margin-left: auto;
+}
+
+
+
+
+a {
+    opacity: 100%;
+    transition: all 0.4s !important;
+}
+
+.right-nav {
+    color: bisque !important;
+    border: none !important;
+    background-color: #d1d3ab1f !important;
+    font-weight: 500px !important;
+
+}
+
+.right-nav-item.active {
+    background-color: #d1d3ab !important;
+    /* Yellowish tone background */
+    color: #0b6e4f !important;
+    /* Dark greenish text color */
+}
+
+.back-button{ 
+    background-color: #d1d3ab !important;
+    color: #085039 !important;
+    /* font-weight: 900 !important; */
+    /* border:  !important; */
+}
+
+/* .active:hover{
+
+    background-color: none !important;
+    
+} */
+
+
+.right-nav:hover{
+    border-radius: 30px !important;
+    /* color: white !important; */
+    background-color: #0b6e4f !important;
+    opacity: 100%;
+}
+
+
+
+.right-nav.active:hover{
+    opacity: 100%;
+    background-color: #d1d3ab !important;
+}
+
+
+
+
+
+.right-right-nav {
+    background-color: none !important;
+    font-weight: 500px !important;
+    color: white !important;
+    border: 1.5px rgba(255, 255, 255, 0.397) solid !important;
+    
+}
+
+.right-right-nav-item.active {
+    border: 1.5px rgba(255, 255, 255, 0.397) solid !important;
+    color: #0b6e4f !important;
+    background-color: #ffffffed !important;
+
+    /* Yellowish tone background */
+    /* Dark greenish text color */
+}
+
+
+
+
+
+
+
+
+
+
+
+
+.nav-item {
+
+    border: none;
+
+}
+
+
+.left-nav-item.active {
+    /* background-color: #d1d3ab00 !important; */
+    /* Yellowish tone background */
+    color: #ffffff !important;
+    background-color:  #0b6e4f  !important;
+    border: #0b6e4f 1px solid !important;
+
+
+    /* Dark greenish text color */
+    /* font-weight: 600; */
+    /* text-decoration: underline; */
+
+}
+
+a.left-nav-item {
+    color: #0b6e4f;
+    border: #00000025 1px solid !important;
+    border-radius: 10px;
+    padding:9px;
+    margin: 2px;
+
+
+}
+
+a.left-nav-item:hover {
+
+    background-color:  #0b6e4f13  !important;
+    border: #0b6e4f63 1px solid !important;
+    
+
+
+}
+
+a.left-nav-item.active:hover  {
+
+    background-color:  #085039  !important;
+    border: #0b6e4f63 1px solid !important;
+    opacity: 100%;
+    
+
+
+}
+
+
+
+a:hover {
+    opacity: 80%;
+    /* background-color: #ffffff2f; */
+    transition: all ease-in-out 0.4s;
+    
+
+
+}
+
+
+input {
+    /*background-color: #0b6e4f0f !important;*/
+}
+
+#content {
+    max-height: 90vh;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+#content::-webkit-scrollbar {
+    display: none;
+}
+
+#content {
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
+}
+
+a.left-nav-item:hover {
+    color: black;
+    border-radius: 30px;
+    /* border: solid 1px;
+transition: all ease-in-out 0.3s; */
+
+
+
+}

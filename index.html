@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="./hcm-logo.svg" />
+
+    <!-- Bootstrap/CSS: imported from node_modules in React components (avoid CDN 404s) -->
+    <!-- Use component styles from /src so Vite serves them correctly -->
+    <link href="/src/components/styles/details.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/src/components/styles/styles.css" />
+    <link rel="stylesheet" href="/src/components/styles/table-styles.css" />
+
+    <link href="https://cdn.lineicons.com/4.0/lineicons.css" rel="stylesheet" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+  <!-- Load jQuery for legacy inline scripts used by the original UI (kept minimal) -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- jQuery/popper/bootstrap JS removed (use bundled bootstrap via npm/React) -->
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HCM</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.10.2/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.min.js"></script>
+    <script>
+      function addInputFields() {
+        var container = document.getElementById("input-fields");
+        var newDiv = document.createElement("div");
+        newDiv.classList.add("input-group", "mt-2", "input-group-custom");
+        newDiv.innerHTML = `
+  <input type="text" class="form-control p-3 border-0 rounded-3 me-1" name="medicine[]" placeholder="Enter Medicine" style="background-color: #ffffff; color: black; min-width: 37% !important">
+  <input type="text" class="form-control p-3 border-0 rounded-3 ms-1 me-1" name="dose[]" placeholder="Enter Dose" style="background-color: #ffffff; color: black; min-width: 37%">
+  <button type="button" class="form-control p-2 border-0 rounded-3 me-1 ms-1" onclick="removeInputFields(this)" style="background-color: rgba(255, 0, 0, 0.654); color: bisque; min-width: 5%; text-align:center;">-</button>
+  <button type="button" class="form-control p-2 border-0 rounded-3 ms-1" onclick="addInputFields()" style="background-color: #1da453; color: bisque; min-width: 5%; text-align:center;">+</button>
+`;
+        container.appendChild(newDiv);
+      }
+
+      function removeInputFields(button) {
+        button.parentElement.remove();
+      }
+    </script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      const button = document.querySelector(".toggle-btn");
+      if (button) {
+        button.addEventListener("click", function () {
+          const sidebar = document.querySelector("#sidebar");
+          if (sidebar) sidebar.classList.toggle("expand");
+        });
+      }
+
+      function test() {
+        event.preventDefault();
+
+        var container = document.createElement("div");
+        container.setAttribute("class", "input-group mb-3");
+
+        var input1 = document.createElement("input");
+        input1.setAttribute("type", "text");
+        input1.setAttribute("name", "labtest");
+        input1.setAttribute(
+          "class",
+          "form-control p-3 border-0 rounded-3 me-auto "
+        );
+        input1.setAttribute("placeholder", "Enter New Lab Test");
+
+        var removeButton = document.createElement("button");
+        removeButton.setAttribute("class", "btn btn-danger");
+        removeButton.setAttribute("type", "button");
+        removeButton.innerHTML = "Remove";
+        removeButton.onclick = function () {
+          container.remove();
+        };
+
+        container.appendChild(input1);
+        container.appendChild(removeButton);
+
+        document
+          .querySelector("#labtest .modal-body .mb-3")
+          .appendChild(container);
+      }
+    </script>
+
+    <!-- <script>
+      $(document).ready(function () {
+        var currentDate = new Date();
+        var formattedDate =
+          ("0" + (currentDate.getMonth() + 1)).slice(-2) +
+          "/" +
+          ("0" + (currentDate.getDate() + 0)).slice(-2) +
+          "/" +
+          currentDate.getFullYear();
+
+        $("#date").val(formattedDate);
+
+        $("#date")
+          .datepicker({
+            format: "mm/dd/yyyy",
+            autoclose: true,
+            endDate: "currentDate",
+            maxDate: currentDate,
+          })
+          .on("changeDate", function (ev) {
+            $(this).datepicker("hide");
+          });
+
+        $("#date").keyup(function () {
+          if (this.value.match(/[^0-9/]/g)) {
+            this.value = this.value.replace(/[^0-9/]/g, "");
+          }
+        });
+
+        // Function to update left to be paid amount
+        function updateLeftToBePaid() {
+          var prev_amt =
+            parseFloat(
+              $("#prev_amt")
+                .text()
+                .replace(/[^\d.-]/g, "")
+            ) || 0;
+          var present_amt = parseFloat($("#present_amt").val()) || 0;
+          var paid_amt = parseFloat($("#paid_amt").val()) || 0;
+          var left_amt = prev_amt + present_amt - paid_amt;
+          $("#left_amt").text(left_amt.toFixed(2));
+        }
+
+        // Trigger calculation on input change
+        $("#present_amt, #paid_amt").on("input", updateLeftToBePaid);
+      });
+    </script> -->
+  </body>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      function handleSaveAndMoveNext(tabId) {
+        const tabLinks = [
+          "personal",
+          "history",
+          "measurements",
+          "mind",
+          "observations",
+          "vitals",
+          "symptoms",
+          "lab",
+        ];
+        const currentIndex = tabLinks.indexOf(tabId);
+        if (currentIndex !== -1 && currentIndex < tabLinks.length - 1) {
+          const nextTab = tabLinks[currentIndex + 1];
+          setActiveTab(nextTab);
+        }
+      }
+
+      function setActiveTab(tabId) {
+        // Add your logic to switch to the tab with tabId
+        const tabs = document.querySelectorAll(".tab");
+        tabs.forEach((tab) => {
+          tab.classList.remove("active");
+          if (tab.id === tabId) {
+            tab.classList.add("active");
+          }
+        });
+
+        const tabContents = document.querySelectorAll(".tab-content");
+        tabContents.forEach((content) => {
+          content.classList.remove("active");
+          if (content.id === `${tabId}-content`) {
+            content.classList.add("active");
+          }
+        });
+      }
+
+      // Attach the event listener to the save buttons
+      const saveButtons = document.querySelectorAll(".save-button");
+      saveButtons.forEach((button) => {
+        button.addEventListener("click", function (e) {
+          e.preventDefault();
+          const tabId = e.target.getAttribute("data-tab-id");
+          handleSaveAndMoveNext(tabId);
+        });
+      });
+    });
+  </script>
+  <!-- <script>
+    document
+    .getElementById("mind-save")
+    .addEventListener("click", function () {
+      document
+        .getElementById("observations-anchor")
+        .click();
+    });
+  </script> -->
+  <script>
+    function updateLeftToBePaid() {
+      var prev_amt =
+        parseFloat(
+          $("#prev_amt")
+            .text()
+            .replace(/[^\d.-]/g, "")
+        ) || 0;
+      var present_amt = parseFloat($("#present_amt").val()) || 0;
+      var paid_amt = parseFloat($("#paid_amt").val()) || 0;
+      var left_amt = prev_amt + present_amt - paid_amt;
+      $("#left_amt").text(left_amt.toFixed(2));
+    }
+
+    // Trigger calculation on input change
+    $("#present_amt, #paid_amt").on("input", updateLeftToBePaid);
+  </script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.0/js/bootstrap.bundle.min.js"></script>
+</html>
