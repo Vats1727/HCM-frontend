@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import apiFetch from '../utils/api';
 
 const History = ({ caseno }) => {
     const [historyData, setHistoryData] = useState(null);
@@ -8,11 +9,7 @@ const History = ({ caseno }) => {
     useEffect(() => {
         const fetchHistory = async () => {
             try {
-                const response = await fetch(`http://localhost:3000/api/patients/${caseno}/history`);
-                if (!response.ok) {
-                    throw new Error('Failed to fetch history data');
-                }
-                const body = await response.json();
+                const body = await apiFetch(`/api/patients/${caseno}/history`);
                 // Unwrap responses that come as { status, message, data: {...} }
                 const payload = body && body.data ? body.data : body;
                 setHistoryData(payload);

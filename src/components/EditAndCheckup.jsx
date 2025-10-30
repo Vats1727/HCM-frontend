@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import apiFetch from "../utils/api";
 
 import History from "./History";
 // import photodisplay from "./add_patient.png"
@@ -233,16 +234,13 @@ const EditAndCheckup = () => {
   useEffect(() => {
     const fetchPaymentData = async () => {
       try {
-        const response = await fetch(
-          `http://localhost:3000/api/payment/${caseno}`
-        );
-        const data = await response.json();
+        const data = await apiFetch(`/api/payment/${caseno}`);
 
         if (data.error) {
           setMessage(data.error);
         } else {
           setPaymentData(data.data);
-          console.log("jm", paymentData);
+          console.log('jm', paymentData);
         }
       } catch (error) {
         setMessage("Failed to fetch payment data");
@@ -279,20 +277,17 @@ const EditAndCheckup = () => {
 
   const fetchPaymentData = async () => {
     try {
-      const response = await fetch(
-        `http://localhost:3000/api/payment/${caseno}`
-      );
-      const data = await response.json();
+      const data = await apiFetch(`/api/payment/${caseno}`);
 
       if (data.error) {
         setMessage(data.error);
-        console.log("payment_table data:", data.data);
+        console.log('payment_table data:', data.data);
       } else {
         setPaymentData(data.data);
         payment_table(data.data);
       }
     } catch (error) {
-      setMessage("Failed to fetch payment data");
+      setMessage('Failed to fetch payment data');
     }
   };
   useEffect(() => {
@@ -336,23 +331,15 @@ const EditAndCheckup = () => {
   useEffect(() => {
     const fetchLabData = async () => {
       try {
-        const response = await fetch(
-          `http://localhost:3000/api/lab/${caseno}`
-        );
-        const data = await response.json();
-        console.log("Fetched data:", data.data);
+        const data = await apiFetch(`/api/lab/${caseno}`);
+        console.log('Fetched data:', data.data);
 
         if (data.error) {
           setMessage(data.error);
         } else {
-          // const LA1 = Object.entries(data.data);
-          // console.table("LA1", LA1);
           const newData = data.data;
           console.log(newData);
-          // const labArray = Array.isArray(data.data) ? data : [data.data];
           setLabData(newData);
-          // console.log("in the fetch array", labArray);
-          // console.log("in the fetch func", labData);
           lab_table(newData);
         }
       } catch (error) {
@@ -365,23 +352,15 @@ const EditAndCheckup = () => {
 
   const fetchLabData = async () => {
     try {
-      const response = await fetch(
-        `http://localhost:3000/api/lab/${caseno}`
-      );
-      const data = await response.json();
-      console.log("Fetched data:", data.data);
+      const data = await apiFetch(`/api/lab/${caseno}`);
+      console.log('Fetched data:', data.data);
 
       if (data.error) {
         setMessage(data.error);
       } else {
-        // const LA1 = Object.entries(data.data);
-        // console.table("LA1", LA1);
         const newData = data.data;
         console.log(newData);
-        // const labArray = Array.isArray(data.data) ? data : [data.data];
         setLabData(newData);
-        // console.log("in the fetch array", labArray);
-        // console.log("in the fetch func", labData);
         lab_table(newData);
       }
     } catch (error) {
@@ -424,25 +403,16 @@ const EditAndCheckup = () => {
     formData.append("caseno", lastInsertedId);
     formData.append("action", "insert_lab");
 
-    const response = await fetch(
-      "http://localhost:3000/api/action",
-      {
-        method: "POST",
-        body: formData, // Send the form data directly
-      }
-    );
-
-    const responseText = await response.text();
     try {
-      const result = JSON.parse(responseText);
-      if (result.status) {
-        console.log("Lab data inserted successfully.");
+      const result = await apiFetch('/api/action', { method: 'POST', body: formData });
+      if (result && result.status) {
+        console.log('Lab data inserted successfully.');
         fetchLabData();
       } else {
-        console.error("Error: ", result.message);
+        console.error('Error: ', result && result.message ? result.message : result);
       }
-    } catch (error) {
-      console.error("Failed to parse JSON response: ", responseText);
+    } catch (err) {
+      console.error('Failed to insert lab data:', err);
     }
   }
 
@@ -485,12 +455,15 @@ const EditAndCheckup = () => {
   const fetchPrescriptions = async () => {
     try {
       if (!caseno) return;
-      const resp = await fetch(`http://localhost:3000/api/lab/${caseno}/prescriptions`);
-      const json = await resp.json();
-      // Accept data array even if server returned status:false (older endpoints sometimes use that)
-      if (json && Array.isArray(json.data)) {
-        setPrescriptionsData(json.data);
-      } else {
+      try {
+        const json = await apiFetch(`/api/lab/${caseno}/prescriptions`);
+        if (json && Array.isArray(json.data)) {
+          setPrescriptionsData(json.data);
+        } else {
+          setPrescriptionsData([]);
+        }
+      } catch (err) {
+        console.error('Failed to fetch prescriptions', err);
         setPrescriptionsData([]);
       }
     } catch (err) {
@@ -502,11 +475,15 @@ const EditAndCheckup = () => {
   const fetchCheckups = async () => {
     try {
       if (!caseno) return;
-      const resp = await fetch(`http://localhost:3000/api/lab/${caseno}/checkup`);
-      const json = await resp.json();
-      if (json && Array.isArray(json.data)) {
-        setCheckupsData(json.data);
-      } else {
+      try {
+        const json = await apiFetch(`/api/lab/${caseno}/checkup`);
+        if (json && Array.isArray(json.data)) {
+          setCheckupsData(json.data);
+        } else {
+          setCheckupsData([]);
+        }
+      } catch (err) {
+        console.error('Failed to fetch checkup remarks', err);
         setCheckupsData([]);
       }
     } catch (err) {
@@ -523,10 +500,7 @@ const EditAndCheckup = () => {
 
   const fetchPatientData = async () => {
       try {
-        const response = await fetch(
-          `http://localhost:3000/api/patients/${caseno}`
-        );
-        const data = await response.json();
+        const data = await apiFetch(`/api/patients/${caseno}`);
         if (data.error) {
           setMessage(data.error);
         } else {
@@ -538,8 +512,8 @@ const EditAndCheckup = () => {
           // Normalize patient data coming from the API.
           const pd = { ...(payload || {}) };
           // Ensure `mind` is an array (API may send a comma-separated string or null).
-          if (pd.mind && typeof pd.mind === "string") {
-            pd.mind = pd.mind.split(",").map((s) => s.trim()).filter(Boolean);
+          if (pd.mind && typeof pd.mind === 'string') {
+            pd.mind = pd.mind.split(',').map((s) => s.trim()).filter(Boolean);
           } else if (!pd.mind) {
             pd.mind = [];
           }
@@ -547,7 +521,7 @@ const EditAndCheckup = () => {
           setPatientData(pd);
         }
       } catch (error) {
-        setMessage("Failed to fetch patient data");
+        setMessage('Failed to fetch patient data');
       }
     };
 
@@ -570,24 +544,14 @@ const EditAndCheckup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(
-        "http://localhost:3000/api/action",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ data: patientData, action: 'update', id: caseno }),
-        }
-      );
-      const data = await response.json();
+      const data = await apiFetch('/api/action', { method: 'POST', body: { data: patientData, action: 'update', id: caseno } });
       if (data.error) {
         setMessage(data.error);
       } else {
-        setMessage("Patient data updated successfully");
+        setMessage('Patient data updated successfully');
       }
     } catch (error) {
-      setMessage("Failed to update patient data");
+      setMessage('Failed to update patient data');
     }
   };
 
@@ -609,29 +573,16 @@ const EditAndCheckup = () => {
 
     formDataObj.caseno = lastInsertedId;
 
-    const response = await fetch(
-      "http://localhost:3000/api/action",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          data: formDataObj,
-          action: "insert_checkup",
-        }),
-      }
-    );
-
-    const responseText = await response.text();
     try {
-      const result = JSON.parse(responseText);
-      if (result.status) {
-        console.log("Checkup data inserted successfully.");
+      const result = await apiFetch('/api/action', { method: 'POST', body: { data: formDataObj, action: 'insert_checkup' } });
+      if (result && result.status) {
+        console.log('Checkup data inserted successfully.');
         try { await fetchCheckups(); } catch (e) { console.warn('Could not refresh checkups', e); }
       } else {
-        console.error("Error: ", result.message);
+        console.error('Error: ', result && result.message ? result.message : result);
       }
     } catch (error) {
-      console.error("Failed to parse JSON response: ", responseText);
+      console.error('Failed to insert checkup data:', error);
     }
   }
 
@@ -671,30 +622,16 @@ const EditAndCheckup = () => {
     formDataObj.caseno = caseno;
     console.log(formDataObj);
 
-    const response = await fetch(
-      "http://localhost:3000/api/action",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          data: formDataObj,
-          action: "insert_prescription",
-        }),
-      }
-    );
-
-    const responseText = await response.text();
     try {
-      const result = JSON.parse(responseText);
-      if (result.status) {
-        console.log("Prescription data inserted successfully.");
-        // Refresh prescriptions list so previous entries show up immediately
+      const result = await apiFetch('/api/action', { method: 'POST', body: { data: formDataObj, action: 'insert_prescription' } });
+      if (result && result.status) {
+        console.log('Prescription data inserted successfully.');
         try { await fetchPrescriptions(); } catch (e) { console.warn('Could not refresh prescriptions', e); }
       } else {
-        console.error("Error: ", result.message);
+        console.error('Error: ', result && result.message ? result.message : result);
       }
     } catch (error) {
-      console.error("Failed to parse JSON response: ", responseText);
+      console.error('Failed to insert prescription data:', error);
     }
   }
 
@@ -717,29 +654,15 @@ const EditAndCheckup = () => {
     // console.log(l_id);
     console.log(formDataObj);
 
-    const response = await fetch(
-      "http://localhost:3000/api/action",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          data: formDataObj,
-          action: "update",
-          id: caseno,
-        }),
-      }
-    );
-
-    const responseText = await response.text();
     try {
-      const result = JSON.parse(responseText);
-      if (result.status) {
+      const result = await apiFetch('/api/action', { method: 'POST', body: { data: formDataObj, action: 'update', id: caseno } });
+      if (result && result.status) {
         console.log(result);
       } else {
-        console.error("Error: ", result.message);
+        console.error('Error: ', result && result.message ? result.message : result);
       }
     } catch (error) {
-      console.error("Failed to parse JSON response: ", responseText);
+      console.error('Failed to update data:', error);
     }
   }
 
@@ -761,29 +684,16 @@ const EditAndCheckup = () => {
 
     formDataObj.caseno = lastInsertedId;
 
-    const response = await fetch(
-      "http://localhost:3000/api/action",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          data: formDataObj,
-          action: "insert_payment",
-        }),
-      }
-    );
-
-    const responseText = await response.text();
     try {
-      const result = JSON.parse(responseText);
-      if (result.status) {
-        console.log("Payment data inserted successfully.");
+      const result = await apiFetch('/api/action', { method: 'POST', body: { data: formDataObj, action: 'insert_payment' } });
+      if (result && result.status) {
+        console.log('Payment data inserted successfully.');
         fetchPaymentData();
       } else {
-        console.error("Error: ", result.message);
+        console.error('Error: ', result && result.message ? result.message : result);
       }
     } catch (error) {
-      console.error("Failed to parse JSON response: ", responseText);
+      console.error('Failed to insert payment data:', error);
     }
   }
 

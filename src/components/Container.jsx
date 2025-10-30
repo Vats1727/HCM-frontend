@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import apiFetch from "../utils/api";
 import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
@@ -26,14 +27,8 @@ const HomeopathicConsultancyManagement = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(
-          "http://localhost:3000/api/patients"
-        );
-        if (!response.ok) {
-          throw new Error(`Failed to fetch data: ${response.statusText}`);
-        }
-        const jsonData = await response.json();
-        console.log("Fetched data:", jsonData);
+        const jsonData = await apiFetch('/api/patients');
+        console.log('Fetched data:', jsonData);
 
         if (jsonData.status) {
           setData(jsonData.data);
@@ -41,8 +36,8 @@ const HomeopathicConsultancyManagement = () => {
           setError(jsonData.message);
         }
       } catch (error) {
-        console.error("Error fetching data:", error);
-        setError(error.message);
+        console.error('Error fetching data:', error);
+        setError(error.message || error.toString());
       } finally {
         setLoading(false);
       }
