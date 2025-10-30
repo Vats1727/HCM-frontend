@@ -26,6 +26,38 @@
   </head>
   <body>
     <div id="root"></div>
+    <!-- runtime shim: rewrite any fetch() calls that target localhost backend to the Render backend URL
+         This lets the existing code continue using http://localhost:3000 while the deployed frontend
+         will transparently call the Render backend without editing many files. -->
+    <script>
+      (function () {
+        // Replace these values with your deployed backend + development origin to rewrite.
+        var FROM = 'http://localhost:3000';
+        var TO = 'https://hcm-9e7e.onrender.com';
+
+        // Expose base for other scripts if needed
+        window.__HCM_API_BASE__ = TO;
+
+        // Wrap window.fetch to rewrite known backend hostnames to the Render URL
+        if (window.fetch && !window.__HCM_FETCH_WRAPPED__) {
+          var originalFetch = window.fetch.bind(window);
+          window.fetch = function (input, init) {
+            try {
+              if (typeof input === 'string') {
+                input = input.replace(FROM, TO);
+              } else if (input && input.url) {
+                input = new Request(input.url.replace(FROM, TO), input);
+              }
+            } catch (e) {
+              // noop
+            }
+            return originalFetch(input, init);
+          };
+          window.__HCM_FETCH_WRAPPED__ = true;
+        }
+      })();
+    </script>
+
     <script type="module" src="/src/main.jsx"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.10.2/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.min.js"></script>
