@@ -31,9 +31,12 @@
          will transparently call the Render backend without editing many files. -->
     <script>
       (function () {
-        // Replace these values with your deployed backend + development origin to rewrite.
-        var FROM = 'http://localhost:3000';
-        var TO = 'https://hcm-9e7e.onrender.com';
+        // Runtime configurable rewrite shim. By default it will rewrite requests
+        // from the common dev backend origin to the deployed backend, but you can
+        // override values by setting window.__HCM_API_REWRITE_FROM__ and
+        // window.__HCM_API_REWRITE_TO__ before this script runs (for advanced setups).
+        var FROM = (typeof window !== 'undefined' && window.__HCM_API_REWRITE_FROM__) || 'http://localhost:3000';
+        var TO = (typeof window !== 'undefined' && window.__HCM_API_REWRITE_TO__) || 'https://hcm-9e7e.onrender.com';
 
         // Expose base for other scripts if needed
         window.__HCM_API_BASE__ = TO;

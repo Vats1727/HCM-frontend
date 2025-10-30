@@ -714,7 +714,7 @@ const EditAndCheckup = () => {
                   <a
                     className="nav-link left-nav-item back-button border-0 "
                     data-bs-toggle="tab"
-                    href="http://localhost:5173/"
+                    href="/"
                     onClick={handleClick}
                   >
                     <i className="fa-solid fa-arrow-left"></i>
