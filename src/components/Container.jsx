@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import apiFetch from "../utils/api";
+import formatDate from "../utils/formatDate";
 import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
@@ -62,11 +63,13 @@ const HomeopathicConsultancyManagement = () => {
     const { caseNo, fileNo, name, mobileNo } = selectedFilters;
     const search = searchTerm.toLowerCase();
 
+    const mobileVal = (item.mobile ?? item.mobile_no ?? item.mobileNo ?? item.phone ?? "").toString().toLowerCase();
+
     return (
-      (caseNo && item.caseno?.toString().toLowerCase().includes(search)) ||
-      (fileNo && item.fileno?.toString().toLowerCase().includes(search)) ||
-      (name && item.name?.toLowerCase().includes(search)) ||
-      (mobileNo && item.mobile.toString().toLowerCase().includes(search))
+      (caseNo && String(item.caseno ?? "").toLowerCase().includes(search)) ||
+      (fileNo && String(item.fileno ?? "").toLowerCase().includes(search)) ||
+      (name && String(item.name ?? "").toLowerCase().includes(search)) ||
+      (mobileNo && mobileVal.includes(search))
     );
   });
 
@@ -307,8 +310,8 @@ const HomeopathicConsultancyManagement = () => {
                       <td>{entry.caseno}</td>
                       <td>{entry.fileno}</td>
                       <td>{entry.name}</td>
-                      <td>{entry.mobile}</td>
-                      <td>{entry.date}</td>
+                      <td>{(entry.mobile ?? entry.mobile_no ?? entry.mobileNo ?? entry.phone ?? '')}</td>
+                      <td>{formatDate(entry.date)}</td>
                       <td>
                         <div className="btn-container">
                           <a

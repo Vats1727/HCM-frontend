@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import apiFetch from '../utils/api';
+import formatDate from '../utils/formatDate';
 
 const History = ({ caseno }) => {
     const [historyData, setHistoryData] = useState(null);
@@ -35,11 +36,8 @@ const History = ({ caseno }) => {
         return <p>Invalid data format: Expected an object</p>;
     }
 
-    const formatDate = (inputDate) => {
-        const dateObj = new Date(inputDate);
-        const formattedDate = dateObj.toLocaleDateString('en-GB'); // Adjust locale as needed
-        return formattedDate;
-    };
+    // local wrapper so existing code can call _formatDate(name)
+    const _formatDate = (inputDate) => formatDate(inputDate);
 
     const renderPrescriptions = (prescriptions) => {
         if (!prescriptions || !Array.isArray(prescriptions) || prescriptions.length === 0) {
@@ -61,28 +59,28 @@ const History = ({ caseno }) => {
                     <div className="input-group">
                         <span className="p-3 border-0 rounded-3 w-100 mb-1 d-flex justify-content-between align-items-center" style={{ backgroundColor: '#0b6e4f', color: 'bisque', textAlign: 'center', fontWeight: 600, fontSize: '20px' }}>
                             <span>{historyData.name} (Case {historyData.caseno})</span>
-                            <span>{historyData.date}</span>
+                            <span>{_formatDate(historyData.date)}</span>
                         </span>
-                        <div className="p-3 border-0 rounded-3 me-auto" style={{ backgroundColor: '#0b6e4f', color: 'bisque', width: '49.75%' }}>
-                            <p><strong>Present:</strong> {historyData.present || ''}</p>
-                            <p><strong>Past:</strong> {historyData.past || ''}</p>
-                            {historyData.checkup_remarks && historyData.checkup_remarks.length > 0 && (
-                                <div className="mt-2">
-                                    <h6 style={{ color: 'bisque' }}>Checkup Remarks</h6>
-                                    {historyData.checkup_remarks.map((c, i) => (
-                                        <div key={i} style={{ color: 'white' }}>{c.date}: {c.remarks}</div>
-                                    ))}
-                                </div>
-                            )}
-                        </div>
-                        <div className="p-3 border-0 rounded-3 ms-auto" style={{ backgroundColor: '#0b6e4f', color: 'bisque', width: '49.75%' }}>
+                            <div className="p-3 border-0 rounded-3 me-auto" style={{ backgroundColor: '#0b6e4f', color: 'bisque', width: '49.75%' }}>
+                                <p><strong>Present:</strong> {historyData.present || ''}</p>
+                                <p><strong>Past:</strong> {historyData.past || ''}</p>
+                                {historyData.checkup_remarks && historyData.checkup_remarks.length > 0 && (
+                                    <div className="mt-2">
+                                        <h6 style={{ color: 'bisque' }}>Checkup Remarks</h6>
+                                        {historyData.checkup_remarks.map((c, i) => (
+                                            <div key={i} style={{ color: 'white' }}>{_formatDate(c.date)}: {c.remarks}</div>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                            <div className="p-3 border-0 rounded-3 ms-auto" style={{ backgroundColor: '#0b6e4f', color: 'bisque', width: '49.75%' }}>
                             <p><strong>Family:</strong> {historyData.family || ''}</p>
                             <p><strong>Contact:</strong> {historyData.mobile || ''}</p>
                             {historyData.prescriptions && historyData.prescriptions.length > 0 && (
                                 <div className="mt-2">
                                     <h6 style={{ color: 'bisque' }}>Prescriptions</h6>
                                     {historyData.prescriptions.map((p, idx) => (
-                                        <div key={idx} style={{ color: 'white' }}>{p.date}: {p.medicine} {p.dose ? `x ${p.dose}` : ''}</div>
+                                        <div key={idx} style={{ color: 'white' }}>{_formatDate(p.date)}: {p.medicine} {p.dose ? `x ${p.dose}` : ''}</div>
                                     ))}
                                 </div>
                             )}
@@ -90,7 +88,7 @@ const History = ({ caseno }) => {
                                 <div className="mt-2">
                                     <h6 style={{ color: 'bisque' }}>Lab Tests</h6>
                                     {historyData.lab_tests.map((l, idx) => (
-                                        <div key={idx} style={{ color: 'white' }}>{l.date}: {l.lab} {l.remarks ? `- ${l.remarks}` : ''}</div>
+                                        <div key={idx} style={{ color: 'white' }}>{_formatDate(l.date)}: {l.lab} {l.remarks ? `- ${l.remarks}` : ''}</div>
                                     ))}
                                 </div>
                             )}
@@ -125,7 +123,7 @@ const History = ({ caseno }) => {
                     <div key={date} className="justify-content-center align-items-center mb-3 mt-1 p-1 rounded-3" style={{ backgroundColor: '#d1d3ab' }}>
                         <div className="input-group">
                             <span className="p-3 border-0 rounded-3 w-100 mb-1 d-flex justify-content-between align-items-center" style={{ backgroundColor: '#0b6e4f', color: 'bisque', textAlign: 'center', fontWeight: 600, fontSize: '20px' }}>
-                                <span>{formatDate(date)}</span>
+                                <span>{_formatDate(date)}</span>
                             </span>
                             <span className="p-3 border-0 rounded-3 me-auto" style={{ backgroundColor: '#0b6e4f', color: 'bisque', width: '49.75%' }}>
                                 <p>{checkup && checkup.remarks ? checkup.remarks : ''}</p>
